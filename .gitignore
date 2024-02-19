@@ -1,3 +1,6 @@
 .DS_Store
 __pycache__/
 
+data/*
+improved_diffusion.egg-info
+mmpi4py/*
