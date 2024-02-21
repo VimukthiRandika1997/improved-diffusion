@@ -63,13 +63,13 @@ class Upsample(nn.Module):
         self.use_conv = use_conv
         self.dims = dims
         if use_conv:
-            self.conv = conv_nd(dims, channels, channels, 3, padding=1)
+            self.conv = conv_nd(dims, channels, channels, 3, padding=1) # 3D conv
 
     def forward(self, x):
         assert x.shape[1] == self.channels
         if self.dims == 3:
             x = F.interpolate(
-                x, (x.shape[2], x.shape[3] * 2, x.shape[4] * 2), mode="nearest"
+                x, (x.shape[2], x.shape[3] * 2, x.shape[4] * 2), mode="nearest" # (mini-batch x channels x [optional depth] x [optional height] x width)
             )
         else:
             x = F.interpolate(x, scale_factor=2, mode="nearest")
@@ -164,10 +164,10 @@ class ResBlock(TimestepBlock):
             self.skip_connection = nn.Identity()
         elif use_conv:
             self.skip_connection = conv_nd(
-                dims, channels, self.out_channels, 3, padding=1
+                dims, channels, self.out_channels, 3, padding=1 # spatial conv
             )
         else:
-            self.skip_connection = conv_nd(dims, channels, self.out_channels, 1)
+            self.skip_connection = conv_nd(dims, channels, self.out_channels, 1) # 1 x 1 conv
 
     def forward(self, x, emb):
         """
